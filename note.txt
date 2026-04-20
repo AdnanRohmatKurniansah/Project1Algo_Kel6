@@ -1,0 +1,15 @@
+1. Input Data 
+2. Tampil Data
+3. Searching (By NoIjasah)
+- Sequential Search 
+- Binary Search
+- Kembali ke menu Utama ---
+4. Sorting 
+- Bubble Sort (By NoIjasah/Asc)
+- Selection Sort (By JenisIjasah/Asc)
+- Insertion Sort (By Nama/Asc)
+- Shell Sort (By NoIjasah/Asc)
+- Quick Sort (By JenisIjasah/Asc)
+- Merge Sort (By Nama/Asc)
+- Kembali ke menu Utama ---
+5. Exit ---
