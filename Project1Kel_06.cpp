@@ -26,6 +26,11 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]);
 void dataTabel(Mahasiswa mhs[], int jmlMhs);
 void shellSort(Mahasiswa mhs[], int size);
 
+void bubblesort(Mahasiswa mas[], int size);
+int partition(Mahasiswa mhs[], int low, int high);
+void quickSort(Mahasiswa mhs[], int low, int high);
+void merge(Mahasiswa mhs[], int left, int mid, int right);
+void mergeSort(Mahasiswa mhs[], int left, int right); 
 int partition(Mahasiswa mhs[], int low, int high);
 void quickSort(Mahasiswa mhs[], int low, int high);
 
@@ -182,6 +187,15 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
 
             switch (opsiSorting) {
                 case 1:
+                    cout << "\nData Sebelum disorting : " << endl;
+                    dataTabel(mhs, *jmlMhs);
+
+                    for (int i = 0; i < *jmlMhs; i++) {
+                        tempMhs[i] = mhs[i];
+                    }
+                    bubblesort(tempMhs, *jmlMhs);
+                    cout << "\nData urut by No Ijasah dengan BUBBLE SORT" << endl;
+                    dataTabel(tempMhs, *jmlMhs);
                     // code
 
                     ulangOpsiMenu();
@@ -225,6 +239,16 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
                     ulangOpsiMenu();
                     break;
                 case 6:
+                    cout << "\nData Sebelum disorting : " << endl;
+                    dataTabel(mhs, *jmlMhs);
+
+                    for (int i = 0; i < *jmlMhs; i++) {
+                        tempMhs[i] = mhs[i];
+                    }
+                    
+                    mergeSort(tempMhs, 0, *jmlMhs - 1);
+                    cout << "\nData urut by Jenis Ijasah dengan QUICK SORT" << endl;
+                    dataTabel(tempMhs, *jmlMhs);
                     // code
 
                     ulangOpsiMenu();
@@ -275,6 +299,26 @@ void shellSort(Mahasiswa mhs[], int size) {
         }
     }
 }
+// bubblesort
+void bubblesort(Mahasiswa mas[], int size){
+    int temp = 0;
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = i+1; j < size - 1 ; j++)
+        {
+            if (mas[j].NoIjasah > mas[j+1].NoIjasah)
+            {
+                temp = mas[j].NoIjasah;
+                mas[j].NoIjasah = mas[j+1].NoIjasah;
+                mas[j+1].NoIjasah = temp;
+            }
+            
+        }
+        
+    }
+    
+
+}
 
 // quick sort
 int partition(Mahasiswa mhs[], int low, int high) {
@@ -298,3 +342,48 @@ void quickSort(Mahasiswa mhs[], int low, int high) {
     }
 }
 
+void merge(Mahasiswa mhs[], int left, int mid, int right) {
+    int i = left;
+    int j = mid + 1;
+    int k = 0;
+
+    Mahasiswa temp[10];
+
+    while (i <= mid && j <= right) {
+        if (mhs[i].Nama <= mhs[j].Nama) {
+            temp[k] = mhs[i];
+            i++;
+        } else {
+            temp[k] = mhs[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i <= mid) {
+        temp[k] = mhs[i];
+        i++;
+        k++;
+    }
+
+    while (j <= right) {
+        temp[k] = mhs[j];
+        j++;
+        k++;
+    }
+
+    for (int x = 0; x < k; x++) {
+        mhs[left + x] = temp[x];
+    }
+}
+
+void mergeSort(Mahasiswa mhs[], int left, int right) {
+    if (left < right) {
+        int mid = (left + right) / 2;
+
+        mergeSort(mhs, left, mid);
+        mergeSort(mhs, mid + 1, right);
+
+        merge(mhs, left, mid, right);
+    }
+}
