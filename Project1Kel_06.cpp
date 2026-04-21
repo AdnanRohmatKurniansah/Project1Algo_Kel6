@@ -4,15 +4,36 @@
 // 123250085 - Adnan Rohmat Kurniansah
 
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-void kembaliMenu();
+typedef struct {
+    int NoIjasah;
+    string JenisIjasah;
+    string Nama;
+} Mahasiswa;
 
-bool ulang = false;
+bool ulang = false; // menu utama
+bool ulangOpsi = false; // opsi menu disetiap pil. menu (child menu)
+
+void kembaliUtama();
+void ulangOpsiMenu();
+
+void tambahData(int *jmlMhs, Mahasiswa mhs[]);
+void sortingData(int *jmlMhs, Mahasiswa mhs[]);
+
+void dataTabel(Mahasiswa mhs[], int jmlMhs);
+void shellSort(Mahasiswa mhs[], int size);
+
+int partition(Mahasiswa mhs[], int low, int high);
+void quickSort(Mahasiswa mhs[], int low, int high);
 
 int main() {
     int opsiMenu;
+
+    Mahasiswa mhs[10];
+    int jmlMhs = 0;
 
     do {
 		cout << "MENU :" << endl;
@@ -26,34 +47,34 @@ int main() {
 		cout << "Pilih : ";
 		cin >> opsiMenu;
 
+        cin.ignore();
+
         switch (opsiMenu) {
             case 1:
                 system("cls");
 
-                // code
+                tambahData(&jmlMhs, mhs);
 
-                kembaliMenu();
+                kembaliUtama();
                 break;
             case 2:
                 system("cls");
 
-                // code
-
-                kembaliMenu();
+                // code 
+                
+                kembaliUtama();
                 break;
             case 3:
                 system("cls");
 
-                // code
+                // code 
 
-                kembaliMenu();
                 break;
             case 4:
                 system("cls");
 
-                // code
+                sortingData(&jmlMhs, mhs);
 
-                kembaliMenu();
                 break;
             case 5:
                 ulang = false;
@@ -66,14 +87,14 @@ int main() {
                 cout << "Pilihan menu tidak ada..." << endl;
                 cout << "==================================" << endl;
 
-                kembaliMenu();
+                kembaliUtama();
                 break;
         }
 
     } while (ulang == true);
 }
 
-void kembaliMenu() {
+void kembaliUtama() {
 	char kembali;
 
     cout << "\nKembali ke Menu Utama(y/t)? ";
@@ -88,3 +109,192 @@ void kembaliMenu() {
 		exit(0);
 	}
 }
+
+void ulangOpsiMenu() {
+    char kembaliOpsi;
+
+	cout << "\nUlangi (y/t)? ";
+    cin >> kembaliOpsi;
+                            
+    if (kembaliOpsi == 'y' || kembaliOpsi == 'Y') {
+        ulangOpsi = true;
+        system("cls");
+    } else {
+        ulangOpsi = false;
+        kembaliUtama();
+    }
+}
+
+void tambahData(int *jmlMhs, Mahasiswa mhs[]) {
+    cout << "INPUT DATA" << endl;
+    cout << "==================================" << endl;
+    cout << "Jumlah data (max 10): ";
+    cin >> *jmlMhs;
+
+    if (*jmlMhs > 10) {
+        system("cls");
+
+        cout << "Jumlah data lebih dari 10!" << endl;
+        cout << "==================================" << endl;
+    } else {
+        cout << "\n";
+        for (int i = 0; i < *jmlMhs; i++) {
+            cout << "Data ke-" << i + 1 << endl;
+            cout << "  " << left << setw(15) << "No Ijasah" << ": ";
+            cin >> mhs[i].NoIjasah;
+            cin.ignore();
+
+            cout << "  " << left << setw(15) << "Jenis Ijasah" << ": ";
+            getline(cin, mhs[i].JenisIjasah);
+
+            cout << "  " << left << setw(15) << "Nama" << ": ";
+            getline(cin, mhs[i].Nama);
+        }
+        cout << "==================================" << endl;
+    }
+}
+
+void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
+    ulangOpsi = false;
+    
+    int opsiSorting;
+    Mahasiswa tempMhs[10]; // data hanya untuk menampilkan hasil sorting tanpa mengubah data asli
+
+    if (*jmlMhs < 1) {
+        cout << "MENU SORTING" << endl;
+        cout << "==================================" << endl;
+        cout << "Data belum diinput" << endl;
+        cout << "==================================" << endl;
+    } else {
+        do {
+            cout << "MENU SORTING" << endl;
+            cout << "==================================" << endl;
+            cout << "1. BUBBLE SORT" << endl;
+            cout << "2. SELECTION SORT" << endl;
+            cout << "3. INSERTION SORT" << endl;
+            cout << "4. SHELL SORT" << endl;
+            cout << "5. QUICK SORT" << endl;
+            cout << "6. MERGE SORT" << endl;
+            cout << "7. Kembali ke MENU UTAMA" << endl;
+            cout << "==================================" << endl;
+            cout << "Pilih : ";
+            cin >> opsiSorting;
+
+            switch (opsiSorting) {
+                case 1:
+                    // code
+
+                    ulangOpsiMenu();
+                    break;
+                case 2:
+                    // code
+
+                    ulangOpsiMenu();
+                    break;
+                case 3:
+                    // code
+
+                    ulangOpsiMenu();
+                    break;
+                case 4:
+                    cout << "\nData Sebelum disorting : " << endl;
+                    dataTabel(mhs, *jmlMhs);
+
+                    for (int i = 0; i < *jmlMhs; i++) {
+                        tempMhs[i] = mhs[i];
+                    }
+                    shellSort(tempMhs, *jmlMhs);
+
+                    cout << "\nData urut by No Ijasah dengan SHELL SORT" << endl;
+                    dataTabel(tempMhs, *jmlMhs);
+
+                    ulangOpsiMenu();
+                    break;
+                case 5:
+                    cout << "\nData Sebelum disorting : " << endl;
+                    dataTabel(mhs, *jmlMhs);
+
+                    for (int i = 0; i < *jmlMhs; i++) {
+                        tempMhs[i] = mhs[i];
+                    }
+                    quickSort(tempMhs, 0, *jmlMhs - 1);
+
+                    cout << "\nData urut by Jenis Ijasah dengan QUICK SORT" << endl;
+                    dataTabel(tempMhs, *jmlMhs);
+
+                    ulangOpsiMenu();
+                    break;
+                case 6:
+                    // code
+
+                    ulangOpsiMenu();
+                    break;
+                case 7:
+                    ulangOpsi = false;
+                    kembaliUtama();
+                    break;
+                default:
+                    system("cls");
+                    cout << "Pilihan di menu sorting tidak ada..." << endl;
+                    cout << "==================================" << endl;
+
+                    ulangOpsiMenu();
+                    break;  
+            }
+        } while (ulangOpsi == true);
+    }
+}
+
+// tampil data dalam bentuk tabel
+void dataTabel(Mahasiswa mhs[], int jmlMhs) {
+    cout << "==========================================" << endl;
+    cout << left << setw(15) << "  No Ijasah"
+                 << setw(20) << "  Jenis Ijasah"
+                 << setw(15) << "  Nama" << endl;
+    cout << "==========================================" << endl;
+    for (int i = 0; i < jmlMhs; i++) {
+        cout << left << setw(15) << ("  " + to_string(mhs[i].NoIjasah))
+                     << setw(20) << ("  " + mhs[i].JenisIjasah)
+                     << setw(15) << ("  " + mhs[i].Nama) << endl;
+    }
+    cout << "==========================================" << endl;
+}
+
+
+// shell sort
+void shellSort(Mahasiswa mhs[], int size) {
+    for (int gap = size / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < size; i++) {
+            Mahasiswa temp = mhs[i];
+            int j = i;
+            while (j >= gap && mhs[j - gap].NoIjasah > temp.NoIjasah) {
+                mhs[j] = mhs[j - gap];
+                j -= gap;
+            }
+            mhs[j] = temp;
+        }
+    }
+}
+
+// quick sort
+int partition(Mahasiswa mhs[], int low, int high) {
+    Mahasiswa pivot = mhs[high];
+    int i = (low - 1);
+    for (int j = low; j <= high - 1; j++) {
+        if (mhs[j].JenisIjasah < pivot.JenisIjasah) {
+            i++;
+            swap(mhs[i], mhs[j]);
+        }
+    }
+    swap(mhs[i + 1], mhs[high]);
+    return (i + 1);
+}
+
+void quickSort(Mahasiswa mhs[], int low, int high) {
+    if (low < high) {
+        int pi = partition(mhs, low, high);
+        quickSort(mhs, low, pi - 1);
+        quickSort(mhs, pi + 1, high);
+    }
+}
+
