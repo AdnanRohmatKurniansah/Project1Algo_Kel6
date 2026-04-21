@@ -35,6 +35,8 @@ void insertionSort(Mahasiswa mhs[], int size);
 void quickSort(Mahasiswa mhs[], int low, int high);
 void merge(Mahasiswa mhs[], int left, int mid, int right);
 void mergeSort(Mahasiswa mhs[], int left, int right); 
+int partition(Mahasiswa mhs[], int low, int high);
+void quickSort(Mahasiswa mhs[], int low, int high);
 
 int main() {
     int opsiMenu;
@@ -198,6 +200,7 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
                     bubblesort(tempMhs, *jmlMhs);
                     cout << "\nData urut by No Ijasah dengan BUBBLE SORT" << endl;
                     dataTabel(tempMhs, *jmlMhs);
+                    // code
 
                     ulangOpsiMenu();
                     break;
@@ -260,6 +263,7 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
                     mergeSort(tempMhs, 0, *jmlMhs - 1);
                     cout << "\nData urut by Jenis Ijasah dengan MERGE SORT" << endl;
                     dataTabel(tempMhs, *jmlMhs);
+                    // code
 
                     ulangOpsiMenu();
                     break;
@@ -397,7 +401,6 @@ void mergeSort(Mahasiswa mhs[], int left, int right) {
         merge(mhs, left, mid, right);
     }
 }
-
 void insertionSort(Mahasiswa mhs[], int size){
     for(int i; i < size-1;i++){
         string key = mhs[i].Nama;
