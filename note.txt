@@ -1,15 +1,15 @@
-1. Input Data 
-2. Tampil Data
+1. Input Data - ✅
+2. Tampil Data - Satria ✅
 3. Searching (By NoIjasah)
-- Sequential Search 
-- Binary Search
+- Sequential Search - landung✅
+- Binary Search - Satria ✅
 - Kembali ke menu Utama ---
 4. Sorting 
-- Bubble Sort (By NoIjasah/Asc)
-- Selection Sort (By JenisIjasah/Asc)
-- Insertion Sort (By Nama/Asc)
-- Shell Sort (By NoIjasah/Asc)
-- Quick Sort (By JenisIjasah/Asc)
-- Merge Sort (By Nama/Asc)
+- Bubble Sort (By NoIjasah/Asc) - landung ✅
+- Selection Sort (By JenisIjasah/Asc) - Satria ✅
+- Insertion Sort (By Nama/Asc) - landung✅
+- Shell Sort (By NoIjasah/Asc) - ✅
+- Quick Sort (By JenisIjasah/Asc) - ✅
+- Merge Sort (By Nama/Asc) - landung✅
 - Kembali ke menu Utama ---
 5. Exit ---

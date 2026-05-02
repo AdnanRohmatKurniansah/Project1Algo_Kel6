@@ -12,7 +12,7 @@ typedef struct {
     int NoIjasah;
     string JenisIjasah;
     string Nama;
-} Mahasiswa;
+} Ijazah;
 
 bool ulang = false; // menu utama
 bool ulangOpsi = false; // opsi menu disetiap pil. menu (child menu)
@@ -20,29 +20,37 @@ bool ulangOpsi = false; // opsi menu disetiap pil. menu (child menu)
 void kembaliUtama();
 void ulangOpsiMenu();
 
-void tambahData(int *jmlMhs, Mahasiswa mhs[]);
-void sortingData(int *jmlMhs, Mahasiswa mhs[]);
-void searching(int *jmlMhs, Mahasiswa mhs[]);
+void tambahData(int *jmlIjazah, Ijazah ijazah[]);
+void tampilData(int *jmlIjazah, Ijazah ijazah[]);
+void sortingData(int *jmlIjazah, Ijazah ijazah[]);
+void searching(int *jmlIjazah, Ijazah ijazah[]);
 
-int sequentialSearch(Mahasiswa mhs[], int size);
+void dataTabel(Ijazah ijazah[], int jmlIjazah); // untuk melihat data dm format tabel
 
-void dataTabel(Mahasiswa mhs[], int jmlMhs);
+// searching
+int sequentialSearch(Ijazah ijazah[], int size);
+int binarySearch(Ijazah ijazah[], int size);
 
-void shellSort(Mahasiswa mhs[], int size);
-void bubblesort(Mahasiswa mas[], int size);
-int partition(Mahasiswa mhs[], int low, int high);
-void insertionSort(Mahasiswa mhs[], int size);
-void quickSort(Mahasiswa mhs[], int low, int high);
-void merge(Mahasiswa mhs[], int left, int mid, int right);
-void mergeSort(Mahasiswa mhs[], int left, int right); 
-int partition(Mahasiswa mhs[], int low, int high);
-void quickSort(Mahasiswa mhs[], int low, int high);
+// sorting
+void shellSort(Ijazah ijazah[], int size);
+
+void bubblesort(Ijazah ijazah[], int size);
+
+void selectionSort(Ijazah ijazah[], int size);
+
+void insertionSort(Ijazah ijazah[], int size);
+
+int partition(Ijazah ijazah[], int low, int high);
+void quickSort(Ijazah ijazah[], int low, int high);
+
+void merge(Ijazah ijazah[], int left, int mid, int right);
+void mergeSort(Ijazah ijazah[], int left, int right);
 
 int main() {
     int opsiMenu;
 
-    Mahasiswa mhs[10];
-    int jmlMhs = 0;
+    Ijazah ijazah[10];
+    int jmlIjazah = 0;
 
     do {
 		cout << "MENU :" << endl;
@@ -62,27 +70,27 @@ int main() {
             case 1:
                 system("cls");
 
-                tambahData(&jmlMhs, mhs);
+                tambahData(&jmlIjazah, ijazah);
 
                 kembaliUtama();
                 break;
             case 2:
                 system("cls");
 
-                // code 
+                tampilData(&jmlIjazah, ijazah);
                 
                 kembaliUtama();
                 break;
             case 3:
                 system("cls");
 
-                searching(&jmlMhs, mhs); 
+                searching(&jmlIjazah, ijazah); 
 
                 break;
             case 4:
                 system("cls");
 
-                sortingData(&jmlMhs, mhs);
+                sortingData(&jmlIjazah, ijazah);
 
                 break;
             case 5:
@@ -134,46 +142,58 @@ void ulangOpsiMenu() {
     }
 }
 
-void tambahData(int *jmlMhs, Mahasiswa mhs[]) {
+void tambahData(int *jmlIjazah, Ijazah ijazah[]) {
     cout << "INPUT DATA" << endl;
     cout << "==================================" << endl;
     cout << "Jumlah data (max 10): ";
-    cin >> *jmlMhs;
+    cin >> *jmlIjazah;
 
-    if (*jmlMhs > 10) {
+    if (*jmlIjazah > 10) {
         system("cls");
 
         cout << "Jumlah data lebih dari 10!" << endl;
         cout << "==================================" << endl;
     } else {
         cout << "\n";
-        for (int i = 0; i < *jmlMhs; i++) {
+        for (int i = 0; i < *jmlIjazah; i++) {
             cout << "Data ke-" << i + 1 << endl;
             cout << "  " << left << setw(15) << "No Ijasah" << ": ";
-            cin >> mhs[i].NoIjasah;
+            cin >> ijazah[i].NoIjasah;
             cin.ignore();
 
             cout << "  " << left << setw(15) << "Jenis Ijasah" << ": ";
-            getline(cin, mhs[i].JenisIjasah);
+            getline(cin, ijazah[i].JenisIjasah);
 
             cout << "  " << left << setw(15) << "Nama" << ": ";
-            getline(cin, mhs[i].Nama);
+            getline(cin, ijazah[i].Nama);
         }
         cout << "==================================" << endl;
     }
 }
 
-void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
+void tampilData(int *jmlIjazah, Ijazah ijazah[]) {
+    cout << "TAMPIL DATA" << endl;
+    if (*jmlIjazah < 1) {
+        cout << "Data belum diinput" << endl;
+        cout << "==========================================" << endl;
+    } else {
+        dataTabel(ijazah, *jmlIjazah);
+    }
+}
+
+void sortingData(int *jmlIjazah, Ijazah ijazah[]) {
     ulangOpsi = false;
     
     int opsiSorting;
-    Mahasiswa tempMhs[10]; // data hanya untuk menampilkan hasil sorting tanpa mengubah data asli
+    Ijazah tempIjazah[10]; // data hanya untuk menampilkan hasil sorting tanpa mengubah data asli
 
-    if (*jmlMhs < 1) {
+    if (*jmlIjazah < 1) {
         cout << "MENU SORTING" << endl;
         cout << "==================================" << endl;
         cout << "Data belum diinput" << endl;
         cout << "==================================" << endl;
+
+        kembaliUtama();
     } else {
         do {
             cout << "MENU SORTING" << endl;
@@ -192,78 +212,83 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
             switch (opsiSorting) {
                 case 1:
                     cout << "\nData Sebelum disorting : " << endl;
-                    dataTabel(mhs, *jmlMhs);
+                    dataTabel(ijazah, *jmlIjazah);
 
-                    for (int i = 0; i < *jmlMhs; i++) {
-                        tempMhs[i] = mhs[i];
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
                     }
-                    bubblesort(tempMhs, *jmlMhs);
+                    bubblesort(tempIjazah, *jmlIjazah);
                     cout << "\nData urut by No Ijasah dengan BUBBLE SORT" << endl;
-                    dataTabel(tempMhs, *jmlMhs);
-                    // code
+                    dataTabel(tempIjazah, *jmlIjazah);
 
                     ulangOpsiMenu();
                     break;
                 case 2:
-                    // code
-
+                    cout << "\nData Sebelum disorting : " << endl;
+                    dataTabel(ijazah, *jmlIjazah);
+ 
+                    for (int i = 0; i < *jmlIjazah; i++) tempIjazah[i] = ijazah[i];
+                    selectionSort(tempIjazah, *jmlIjazah);
+ 
+                    cout << "\nData urut by Jenis Ijasah dengan SELECTION SORT (Asc)" << endl;
+                    dataTabel(tempIjazah, *jmlIjazah);
+ 
                     ulangOpsiMenu();
                     break;
                 case 3:
                     cout << "\nData Sebelum disorting : " << endl;
-                    dataTabel(mhs, *jmlMhs);
+                    dataTabel(ijazah, *jmlIjazah);
 
-                    for (int i = 0; i < *jmlMhs; i++) {
-                        tempMhs[i] = mhs[i];
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
                     }
-                    insertionSort(tempMhs, *jmlMhs);
+                    insertionSort(tempIjazah, *jmlIjazah);
 
-                    cout << "\nData urut by Jenis Ijasah dengan INSERTION SORT" << endl;
-                    dataTabel(tempMhs, *jmlMhs);
+                    cout << "\nData urut by Nama dengan INSERTION SORT" << endl;
+                    dataTabel(tempIjazah, *jmlIjazah);
 
 
                     ulangOpsiMenu();
                     break;
                 case 4:
                     cout << "\nData Sebelum disorting : " << endl;
-                    dataTabel(mhs, *jmlMhs);
+                    dataTabel(ijazah, *jmlIjazah);
 
-                    for (int i = 0; i < *jmlMhs; i++) {
-                        tempMhs[i] = mhs[i];
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
                     }
-                    shellSort(tempMhs, *jmlMhs);
+                    shellSort(tempIjazah, *jmlIjazah);
 
                     cout << "\nData urut by No Ijasah dengan SHELL SORT" << endl;
-                    dataTabel(tempMhs, *jmlMhs);
+                    dataTabel(tempIjazah, *jmlIjazah);
 
                     ulangOpsiMenu();
                     break;
                 case 5:
                     cout << "\nData Sebelum disorting : " << endl;
-                    dataTabel(mhs, *jmlMhs);
+                    dataTabel(ijazah, *jmlIjazah);
 
-                    for (int i = 0; i < *jmlMhs; i++) {
-                        tempMhs[i] = mhs[i];
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
                     }
-                    quickSort(tempMhs, 0, *jmlMhs - 1);
+                    quickSort(tempIjazah, 0, *jmlIjazah - 1);
 
                     cout << "\nData urut by Jenis Ijasah dengan QUICK SORT" << endl;
-                    dataTabel(tempMhs, *jmlMhs);
+                    dataTabel(tempIjazah, *jmlIjazah);
 
                     ulangOpsiMenu();
                     break;
                 case 6:
                     cout << "\nData Sebelum disorting : " << endl;
-                    dataTabel(mhs, *jmlMhs);
+                    dataTabel(ijazah, *jmlIjazah);
 
-                    for (int i = 0; i < *jmlMhs; i++) {
-                        tempMhs[i] = mhs[i];
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
                     }
                     
-                    mergeSort(tempMhs, 0, *jmlMhs - 1);
-                    cout << "\nData urut by Jenis Ijasah dengan MERGE SORT" << endl;
-                    dataTabel(tempMhs, *jmlMhs);
-                    // code
+                    mergeSort(tempIjazah, 0, *jmlIjazah - 1);
+                    cout << "\nData urut by Nama dengan MERGE SORT" << endl;
+                    dataTabel(tempIjazah, *jmlIjazah);
 
                     ulangOpsiMenu();
                     break;
@@ -284,148 +309,160 @@ void sortingData(int *jmlMhs, Mahasiswa mhs[]) {
 }
 
 // tampil data dalam bentuk tabel
-void dataTabel(Mahasiswa mhs[], int jmlMhs) {
+void dataTabel(Ijazah ijazah[], int jmlIjazah) {
     cout << "==========================================" << endl;
     cout << left << setw(15) << "  No Ijasah"
                  << setw(20) << "  Jenis Ijasah"
                  << setw(15) << "  Nama" << endl;
     cout << "==========================================" << endl;
-    for (int i = 0; i < jmlMhs; i++) {
-        cout << left << setw(15) << ("  " + to_string(mhs[i].NoIjasah))
-                     << setw(20) << ("  " + mhs[i].JenisIjasah)
-                     << setw(15) << ("  " + mhs[i].Nama) << endl;
+    for (int i = 0; i < jmlIjazah; i++) {
+        cout << left << setw(15) << ("  " + to_string(ijazah[i].NoIjasah))
+                     << setw(20) << ("  " + ijazah[i].JenisIjasah)
+                     << setw(15) << ("  " + ijazah[i].Nama) << endl;
     }
     cout << "==========================================" << endl;
 }
 
 
 // shell sort
-void shellSort(Mahasiswa mhs[], int size) {
+void shellSort(Ijazah ijazah[], int size) {
     for (int gap = size / 2; gap > 0; gap /= 2) {
         for (int i = gap; i < size; i++) {
-            Mahasiswa temp = mhs[i];
+            Ijazah temp = ijazah[i];
             int j = i;
-            while (j >= gap && mhs[j - gap].NoIjasah > temp.NoIjasah) {
-                mhs[j] = mhs[j - gap];
+            while (j >= gap && ijazah[j - gap].NoIjasah > temp.NoIjasah) {
+                ijazah[j] = ijazah[j - gap];
                 j -= gap;
             }
-            mhs[j] = temp;
+            ijazah[j] = temp;
         }
     }
 }
 // bubblesort
-void bubblesort(Mahasiswa mas[], int size){
-    int temp = 0;
+void bubblesort(Ijazah ijazah[], int size){
     for (int i = 0; i < size - 1; i++)
     {
-        for (int j = i+1; j < size - 1 ; j++)
+        for (int j = 0; j < size - i - 1; j++)
         {
-            if (mas[j].NoIjasah > mas[j+1].NoIjasah)
+            if (ijazah[j].NoIjasah > ijazah[j+1].NoIjasah)
             {
-                temp = mas[j].NoIjasah;
-                mas[j].NoIjasah = mas[j+1].NoIjasah;
-                mas[j+1].NoIjasah = temp;
+                swap(ijazah[j], ijazah[j+1]);
             }
-            
         }
-        
     }
-    
-
 }
 
-// quick sort
-int partition(Mahasiswa mhs[], int low, int high) {
-    Mahasiswa pivot = mhs[high];
+int partition(Ijazah ijazah[], int low, int high) {
+    Ijazah pivot = ijazah[high];
     int i = (low - 1);
     for (int j = low; j <= high - 1; j++) {
-        if (mhs[j].JenisIjasah < pivot.JenisIjasah) {
+        if (ijazah[j].JenisIjasah < pivot.JenisIjasah) {
             i++;
-            swap(mhs[i], mhs[j]);
+            swap(ijazah[i], ijazah[j]);
         }
     }
-    swap(mhs[i + 1], mhs[high]);
+    swap(ijazah[i + 1], ijazah[high]);
     return (i + 1);
 }
 
-void quickSort(Mahasiswa mhs[], int low, int high) {
+// quick sort
+void quickSort(Ijazah ijazah[], int low, int high) {
     if (low < high) {
-        int pi = partition(mhs, low, high);
-        quickSort(mhs, low, pi - 1);
-        quickSort(mhs, pi + 1, high);
+        int pi = partition(ijazah, low, high);
+        quickSort(ijazah, low, pi - 1);
+        quickSort(ijazah, pi + 1, high);
     }
 }
 
-void merge(Mahasiswa mhs[], int left, int mid, int right) {
+void merge(Ijazah ijazah[], int left, int mid, int right) {
     int i = left;
     int j = mid + 1;
     int k = 0;
 
-    Mahasiswa temp[10];
+    Ijazah temp[10];
 
     while (i <= mid && j <= right) {
-        if (mhs[i].Nama <= mhs[j].Nama) {
-            temp[k] = mhs[i];
+        if (ijazah[i].Nama <= ijazah[j].Nama) {
+            temp[k] = ijazah[i];
             i++;
         } else {
-            temp[k] = mhs[j];
+            temp[k] = ijazah[j];
             j++;
         }
         k++;
     }
 
     while (i <= mid) {
-        temp[k] = mhs[i];
+        temp[k] = ijazah[i];
         i++;
         k++;
     }
 
     while (j <= right) {
-        temp[k] = mhs[j];
+        temp[k] = ijazah[j];
         j++;
         k++;
     }
 
     for (int x = 0; x < k; x++) {
-        mhs[left + x] = temp[x];
+        ijazah[left + x] = temp[x];
     }
 }
 
-void mergeSort(Mahasiswa mhs[], int left, int right) {
+// merge sort
+void mergeSort(Ijazah ijazah[], int left, int right) {
     if (left < right) {
         int mid = (left + right) / 2;
 
-        mergeSort(mhs, left, mid);
-        mergeSort(mhs, mid + 1, right);
+        mergeSort(ijazah, left, mid);
+        mergeSort(ijazah, mid + 1, right);
 
-        merge(mhs, left, mid, right);
+        merge(ijazah, left, mid, right);
     }
 }
-void insertionSort(Mahasiswa mhs[], int size){
-    for(int i; i < size-1;i++){
-        string key = mhs[i].Nama;
-        int j = i-1;
 
-        while (j>=0 && mhs[j].Nama > key)
-        {
-            mhs[j+1].Nama = mhs[j].Nama;
-            j = j-1;
+// selection sort
+void selectionSort(Ijazah ijazah[], int size) {
+    for (int i = 0; i < size - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < size; j++) {
+            if (ijazah[j].JenisIjasah < ijazah[minIdx].JenisIjasah) {
+                minIdx = j;
+            }
         }
-        mhs[j+1].Nama =  key;
+        if (minIdx != i) {
+            swap(ijazah[i], ijazah[minIdx]);
+        }
     }
 }
 
-void searching(int *jmlMhs, Mahasiswa mhs[]){
+// insertion sort
+void insertionSort(Ijazah ijazah[], int size){
+    for(int i = 1; i < size; i++){
+        Ijazah key = ijazah[i];
+        int j = i - 1;
+
+        while (j >= 0 && ijazah[j].Nama > key.Nama){
+            ijazah[j+1] = ijazah[j];
+            j--;
+        }
+        ijazah[j+1] = key;
+    }
+}
+
+void searching(int *jmlIjazah, Ijazah ijazah[]){
     ulangOpsi = false;
     
-    int opsiSorting;
-    Mahasiswa tempMhs[10]; // data hanya untuk menampilkan hasil sorting tanpa mengubah data asli
+    int opsiSearching;
+    Ijazah tempIjazah[10]; // hanya utk tampil hasil searching tanpa mengubah data asli (only binary search)
 
-    if (*jmlMhs < 1) {
-        cout << "MENU SORTING" << endl;
+    if (*jmlIjazah < 1) {
+        cout << "MENU SEARCHING" << endl;
         cout << "==================================" << endl;
         cout << "Data belum diinput" << endl;
         cout << "==================================" << endl;
+
+        kembaliUtama();
     } else {
         do {
             cout << "MENU SEARCHING" << endl;
@@ -435,58 +472,92 @@ void searching(int *jmlMhs, Mahasiswa mhs[]){
             cout << "3. Kembali ke MENU UTAMA" << endl;
             cout << "==================================" << endl;
             cout << "Pilih : ";
-            cin >> opsiSorting;
-            switch (opsiSorting)
-            {
-            case 1:{
-                int hasil = sequentialSearch(mhs, *jmlMhs);
-                if (hasil != -1) {
-                    cout << "\nData ditemukan!\n";
-                    cout << "No Ijasah   : " << mhs[hasil].NoIjasah << endl;
-                    cout << "Jenis Ijasah: " << mhs[hasil].JenisIjasah << endl;
-                    cout << "Nama        : " << mhs[hasil].Nama << endl;
-                } else {
-                    cout << "\nNomor Ijazah tidak ditemukan!\n";
+            cin >> opsiSearching;
+            switch (opsiSearching) {
+                case 1: {
+                    int hasil = sequentialSearch(ijazah, *jmlIjazah);
+                    if (hasil != -1) {
+                        cout << "\nData ditemukan!\n";
+                        cout << "No Ijasah   : " << ijazah[hasil].NoIjasah << endl;
+                        cout << "Jenis Ijasah: " << ijazah[hasil].JenisIjasah << endl;
+                        cout << "Nama        : " << ijazah[hasil].Nama << endl;
+                    } else {
+                        cout << "\nNomor Ijazah tidak ditemukan!\n";
+                    }
+                    ulangOpsiMenu();
+                    break;
                 }
-                ulangOpsiMenu();
-                break;
-            }
-            case 2:
-                /* code */
-                break;
+                case 2: {
+                    for (int i = 0; i < *jmlIjazah; i++) {
+                        tempIjazah[i] = ijazah[i];
+                    }
+                    shellSort(tempIjazah, *jmlIjazah); 
+    
+                    int hasil = binarySearch(tempIjazah, *jmlIjazah);
+                    if (hasil != -1) {
+                        cout << "\nData ditemukan!\n";
+                        cout << "No Ijasah   : " << tempIjazah[hasil].NoIjasah << endl;
+                        cout << "Jenis Ijasah: " << tempIjazah[hasil].JenisIjasah << endl;
+                        cout << "Nama        : " << tempIjazah[hasil].Nama << endl;
+                    } else {
+                        cout << "\nNomor Ijazah tidak ditemukan!\n";
+                    }
+                    ulangOpsiMenu();
+                    break;
+                }
+                case 3:
+                    ulangOpsi = false;
+                    kembaliUtama();
+                    break;
+                default:
+                    system("cls");
+                    cout << "Pilihan di menu searching tidak ada..." << endl;
+                    cout << "==================================" << endl;
 
-            case 3:
-                ulangOpsi = false;
-                kembaliUtama();
-                break;
-            
-            default:
-                system("cls");
-                cout << "Pilihan di menu sorting tidak ada..." << endl;
-                cout << "==================================" << endl;
-
-                ulangOpsiMenu();
-                break;
-            }
-
+                    ulangOpsiMenu();
+                    break;
+                }
         } while(ulangOpsi == true);
     }
-
 }
 
-int sequentialSearch(Mahasiswa mhs[], int size){
+int sequentialSearch(Ijazah ijazah[], int size){
     int dicari;
     system("cls");
-    cout << "Mencari Nomor Ijazah menggunakan Sequential Search" << endl;
+    cout << "SEQUENTIAL SEARCH" << endl;
     cout << "================================================" << endl;
-    cout << "Input Nomor Ijazah yang ingin dicari : ";
+    cout << "Nomor Ijazah yang dicari : ";
     cin >> dicari;
 
     for(int i = 0; i < size; i++){
-        if(mhs[i].NoIjasah == dicari){
+        if(ijazah[i].NoIjasah == dicari){
             return i;
         }
     }
 
+    return -1;
+}
+
+int binarySearch(Ijazah ijazah[], int size) {
+    int dicari;
+    system("cls");
+    cout << "BINARY SEARCH" << endl;
+    cout << "================================================" << endl;
+    cout << "Nomor Ijazah yang dicari : ";
+    cin >> dicari;
+ 
+    int low = 0, high = size - 1;
+ 
+    while (low <= high) {
+        int mid = (low + high) / 2;
+ 
+        if (ijazah[mid].NoIjasah == dicari) {
+            return mid;
+        } else if (ijazah[mid].NoIjasah < dicari) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
     return -1;
 }
