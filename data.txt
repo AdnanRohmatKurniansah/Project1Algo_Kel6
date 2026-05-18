@@ -1,0 +1,5 @@
+Data ke-1
+No Ijasah    : 1
+Jenis Ijasah : 2
+Nama         : landung
+==================================
